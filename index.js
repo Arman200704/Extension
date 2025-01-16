@@ -42,6 +42,8 @@ app.post("/analyze", async (req, res) => {
       3. Consistency in design elements.
       4. Accessibility features.
       5. Any potential usability issues.
+      6. Grammar issues.
+      7. Any other UI/UX improvements you can suggest.
 
     Provide actionable suggestions for each identified issue.
   `;
@@ -71,7 +73,7 @@ async function sendRequestToChatGPT(filePath, prompt) {
     // console.log(fileContent)
     // const fullPrompt = `${prompt}\n\nFile Content:\n${fileContent}`;
     const openai = new OpenAI();
-    console.log(host + filePath);
+    console.log(host + "screenshots/" + filePath);
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
