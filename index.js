@@ -22,7 +22,8 @@ app.post("/analyze", async (req, res) => {
   try {
     // Decode base64 image
     const base64Data = screenshot.replace(/^data:image\/png;base64,/, "");
-    const filePath = path.join(__dirname, "screenshots", `screenshot-${Date.now()}.png`);
+    const filename = `screenshot-${Date.now()}.png`;
+    const filePath = path.join(__dirname, "screenshots", filename);
 
     // Ensure the screenshots directory exists
     if (!fs.existsSync(path.join(__dirname, "screenshots"))) {
@@ -44,7 +45,7 @@ app.post("/analyze", async (req, res) => {
 
     Provide actionable suggestions for each identified issue.
   `;
-    const result = await sendRequestToChatGPT(filePath, prompt);
+    const result = await sendRequestToChatGPT(filename, prompt);
     console.log('ChatGPT Response:', result);
     // Respond to the extension with the ChatGPT analysis
     res.json(result);
@@ -81,7 +82,7 @@ async function sendRequestToChatGPT(filePath, prompt) {
                   {
                       type: "image_url",
                       image_url: {
-                          "url": host + filePath,
+                          "url": host + "screenshots/" + filePath,
                       },
                   }
               ],
