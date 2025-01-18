@@ -87,7 +87,7 @@ app.post("/analyze", async (req, res) => {
 
         Provide actionable issues and suggestions for each identified context.
 
-        Give a very detailed analysis for each context, try to find as many issues as possible and provide suggestions for each issue, and minimum 2 suggestions for each context if there are.
+        Give a very detailed analysis for each context, try to find as many issues as possible and provide suggestions for each issue, and minimum 3 suggestions for each context if there are, and please be specific as possible.
     `;
 
     const result = await sendRequestToChatGPT(screenshotsPaths, prompt);
@@ -114,7 +114,7 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       ui_ux: z.array(
         z.object({
           title: z.string(),
-          problems: z.array(z.object({ issue: z.string(), description: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
+          problems: z.array(z.object({ issue: z.string(), description: z.string(), location: z.string(), infoLink: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
         }),
       ),
       spelling_issues: z.array(
