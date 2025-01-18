@@ -168,8 +168,13 @@ async function sendRequestToChatGPT(screenshots, prompt) {
 
     const firstContext = completion.choices[0].message.content;
     const nextContextData = nextContext.choices[0].message.content;
-    const ui_ux = firstContext.ui_ux.concat(nextContextData.ui_ux);
-    const spelling_issues = firstContext.spelling_issues.concat(nextContextData.spelling_issues);
+    const ui_ux = [
+      ...firstContext.ui_ux,
+      ...nextContextData.ui_ux,
+    ];
+    const spelling_issues = [
+      ...firstContext.spelling_issues,
+      ...nextContextData.spelling_issues];
 
     return { ui_ux, spelling_issues };
 
