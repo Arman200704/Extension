@@ -20,7 +20,7 @@ app.use('/screenshots', express.static(path.join('screenshots')));
 
 // Save screenshot and send to ChatGPT
 app.post("/analyze", async (req, res) => {
-  const { screenshots, url, focusOn, about } = req.body;
+  const { screenshots, url, focusOn } = req.body;
 
 
   if (!screenshots) {
@@ -48,7 +48,8 @@ app.post("/analyze", async (req, res) => {
 
       console.log("Screenshot saved:", filePath);
     }
-
+    const about = await whatAboutIsThisWebPage(url);
+    console.log('About:', about);
     const lighthouseReport = await runLighthouse(url);
     const prompt = `
     Analyze the attached image of a web application. Identify areas for improvement in terms of UI/UX design and functionality. Focus on:
@@ -204,4 +205,20 @@ async function runLighthouse(url) {
   await chrome.kill();
 
   return runnerResult.lhr.categories;
+}
+
+async function whatAboutIsThisWebPage(url) {
+  const openai = new OpenAI();
+  const prompt = `
+  What is this web page about? Analyze the content and context of the web page and provide a brief summary.
+  ${url}
+  `;
+
+  const completion = await openai.completions.create({
+    engine: "davinci",
+    prompt,
+    max_tokens: 100,
+  });
+
+  return completion.choices[0].text;
 }
