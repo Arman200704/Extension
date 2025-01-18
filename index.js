@@ -161,6 +161,7 @@ async function sendRequestToChatGPT(filePath, prompt) {
 async function runLighthouse(url) {
   const chrome = await ChromeLauncher.launch({
     startingUrl: url,
+    chromePath: "/usr/bin/chromium",
     chromeFlags: ['--headless', '--disable-gpu', '--no-sandbox',   '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
       '--disable-software-rasterizer',]
