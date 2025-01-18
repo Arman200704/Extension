@@ -161,7 +161,7 @@ async function sendRequestToChatGPT(filePath, prompt) {
 async function runLighthouse(url) {
   const chrome = await ChromeLauncher.launch({
     startingUrl: url,
-    chromeFlags: ['--headless', '--disable-gpu']
+    chromeFlags: ['--headless', '--disable-gpu', '--no-sandbox']
   })
 
   console.log(`Chrome debugging port running on ${chrome.port}`);
