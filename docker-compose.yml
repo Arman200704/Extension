@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .         # Use the current directory for the Dockerfile
+      dockerfile: Dockerfile
+    container_name: node_app
+    working_dir: /app
+    volumes:
+      - .:/app              # Mount the current directory to /app in the container
+      - ./screenshots:/app/screenshots # Persist the screenshots folder
+      - /app/node_modules   # Ensure node_modules is container-specific
+    ports:
+      - "3125:3125"         # Map container port 3000 to host port 3000
+    environment:
+      NODE_ENV: development # Set environment variable
+    command: sh -c "npm install && npm start" # Install dependencies and start the app
+
+volumes:
+  screenshots: {}
