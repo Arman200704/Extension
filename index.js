@@ -46,11 +46,42 @@ app.post("/analyze", async (req, res) => {
     const lighthouseReport = await runLighthouse(url);
     const prompt = `
     Analyze the attached image of a web application. Identify areas for improvement in terms of UI/UX design and functionality. Focus on:
+        1. Layout and spacing.
+        2. Font choices and readability.
+        3. Consistency in design elements.
+        4. Accessibility features.
+        5. Any potential usability issues.
+        6. Grammar issues.
+        7. Any other UI/UX improvements you can suggest.
+        8. Inconsistent Design Elements
+        9. Poor Navigation Structure
+        10. Cluttered Interface
+        11. Slow Loading Times
+        12. Lack of Mobile Responsiveness
+        13. Unintuitive User Flows
+        14. Low Contrast for Text and Backgrounds
+        15. Missing Accessibility Features
+        16. Confusing or Ambiguous Call-to-Actions
+        17. Overwhelming Amount of Information
+        18. Insufficient Feedback for User Actions
+        19. Complex Onboarding Process
+        20. Unclear Error Messages
+        21. Inconsistent Typography
+        22. Hidden Features or Options
+        23. Lack of Visual Hierarchy
+        24. Non-Standard Interactions or Patterns
+        25. Unresponsive or Buggy UI Components
+        26. Irrelevant or Low-Quality Content
+        27. Poorly Designed Search Functionality
+
+        Analyze the attached image of a web application.
 
         Here is Lighthouse report which will help you to generate more insights.
         ${lighthouseReport}
 
-        Provide actionable issues and suggestions.
+        Provide actionable issues and suggestions for each identified context.
+
+        Give a very detailed analysis for each context.
     `;
 
     const result = await sendRequestToChatGPT(filename, prompt);
