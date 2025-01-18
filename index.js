@@ -20,7 +20,7 @@ app.use('/screenshots', express.static(path.join('screenshots')));
 
 // Save screenshot and send to ChatGPT
 app.post("/analyze", async (req, res) => {
-  const { screenshots, url } = req.body;
+  const { screenshots, url, focusOn, about } = req.body;
 
 
   if (!screenshots) {
@@ -84,6 +84,10 @@ app.post("/analyze", async (req, res) => {
 
         Here is Lighthouse report which will help you to generate more insights.
         ${lighthouseReport}
+
+        Web Page is about ${about}.
+        Focus on the following contexts:
+        ${focusOn}
 
         Provide actionable issues and suggestions for each identified context.
 
