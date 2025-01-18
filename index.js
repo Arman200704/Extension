@@ -135,22 +135,40 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       }
     });
     const openai = new OpenAI();
+    const messages = [
+      {
+          role: "user",
+          content: [
+              { type: "text", text: prompt },
+              ...screenshotsData,
+          ],
+      },
+    ];
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [
-          {
-              role: "user",
-              content: [
-                  { type: "text", text: prompt },
-                  ...screenshotsData,
-              ],
-          },
-      ],
+      messages: messages,
       response_format: zodResponseFormat(responseFormat, "responseFormat")
     });
 
+    messages.push(completion.choices[0].message);
+
+    messages.push({
+      role: "user",
+      content: [
+        { type: "text", text: "Continue with other contexts" },
+      ],
+    })
     
-    return JSON.parse(completion.choices[0].message.content);
+    const nextContext = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: messages,
+      response_format: zodResponseFormat(responseFormat, "responseFormat")
+    });
+
+    console.log('Next Context:', nextContext.choices[0].message.content);
+    console.log('Completition:', completion.choices[0].message.content);
+    return JSON.parse(nextContext.choices[0].message.content);
 
   } catch (error) {
     console.error('Error communicating with OpenAI API:', error.response?.data || error.message);
