@@ -216,7 +216,6 @@ async function whatAboutIsThisWebPage(url) {
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
-    prompt,
     messages: [
       {
         role: "user",
