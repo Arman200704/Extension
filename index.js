@@ -166,9 +166,12 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       response_format: zodResponseFormat(responseFormat, "responseFormat")
     });
 
-    console.log('Next Context:', nextContext.choices[0].message.content);
-    console.log('Completition:', completion.choices[0].message.content);
-    return JSON.parse(nextContext.choices[0].message.content);
+    const firstContext = completion.choices[0].message.content;
+    const nextContextData = nextContext.choices[0].message.content;
+    const ui_ux = firstContext.ui_ux.concat(nextContextData.ui_ux);
+    const spelling_issues = firstContext.spelling_issues.concat(nextContextData.spelling_issues);
+
+    return { ui_ux, spelling_issues };
 
   } catch (error) {
     console.error('Error communicating with OpenAI API:', error.response?.data || error.message);
