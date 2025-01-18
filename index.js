@@ -166,8 +166,8 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       response_format: zodResponseFormat(responseFormat, "responseFormat")
     });
 
-    const firstContext = completion.choices[0].message.content;
-    const nextContextData = nextContext.choices[0].message.content;
+    const firstContext = JSON.parse(completion.choices[0].message.content);
+    const nextContextData = JSON.parse(nextContext.choices[0].message.content);
     const ui_ux = [
       ...firstContext.ui_ux,
       ...nextContextData.ui_ux,
