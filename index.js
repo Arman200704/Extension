@@ -59,7 +59,7 @@ app.post("/analyze", async (req, res) => {
         4. Accessibility features.
         5. Any potential usability issues.
         6. Grammar issues.
-        7. Any other UI/UX improvements you can suggest.
+        7. Content privacy issues.
         8. Inconsistent Design Elements
         9. Poor Navigation Structure
         10. Cluttered Interface
