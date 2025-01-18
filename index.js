@@ -9,6 +9,7 @@ import fs from 'fs';
 import { z } from 'zod';
 import { configDotenv } from 'dotenv';
 import { zodResponseFormat } from 'openai/helpers/zod.mjs';
+import axios from 'axios';
 
 configDotenv();
 
@@ -48,7 +49,10 @@ app.post("/analyze", async (req, res) => {
 
       console.log("Screenshot saved:", filePath);
     }
-    const about = await whatAboutIsThisWebPage(url);
+
+    const webpage = await fetchWebpage(url);
+    console.log('Webpage:', webpage);
+    const about = await whatAboutIsThisWebPage(webpage);
     console.log('About:', about);
     const lighthouseReport = await runLighthouse(url);
     const prompt = `
@@ -207,11 +211,11 @@ async function runLighthouse(url) {
   return runnerResult.lhr.categories;
 }
 
-async function whatAboutIsThisWebPage(url) {
+async function whatAboutIsThisWebPage(html) {
   const openai = new OpenAI();
   const prompt = `
   What is this web page about? Analyze the content and context of the web page and provide a brief summary.
-  ${url}
+  ${html}
   `;
 
   const completion = await openai.chat.completions.create({
@@ -227,4 +231,13 @@ async function whatAboutIsThisWebPage(url) {
   });
 
   return completion.choices[0].message.content;
+}
+
+async function fetchWebpage(url) {
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching webpage:', error.message);
+  }
 }
