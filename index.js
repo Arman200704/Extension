@@ -15,7 +15,7 @@ configDotenv();
 
 const app = express();
 app.use(cors())
-app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use('/screenshots', express.static(path.join('screenshots')));
 
 // Save screenshot and send to ChatGPT
