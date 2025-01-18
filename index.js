@@ -20,28 +20,34 @@ app.use('/screenshots', express.static(path.join('screenshots')));
 
 // Save screenshot and send to ChatGPT
 app.post("/analyze", async (req, res) => {
-  const { screenshot, url } = req.body;
+  const { screenshots, url } = req.body;
 
 
-  if (!screenshot) {
-    return res.status(400).json({ result: "No screenshot received." });
+  if (!screenshots) {
+    return res.status(400).json({ result: "No screenshots received." });
   }
 
   try {
+    const screenshotsPaths = [];
     // Decode base64 image
-    const base64Data = screenshot.replace(/^data:image\/png;base64,/, "");
-    const filename = `screenshot-${Date.now()}.png`;
-    const filePath = path.join("screenshots", filename);
+    for (let i = 0; i < screenshots.length; i++) {
+      const screenshot = screenshots[i];
+      const base64Data = screenshot.replace(/^data:image\/png;base64,/, "");
+      const filename = `screenshot-${Date.now()}.png`;
+      const filePath = path.join("screenshots", filename);
+      
+      // Ensure the screenshots directory exists
+      if (!fs.existsSync(path.join("screenshots"))) {
+        fs.mkdirSync(path.join("screenshots"));
+      }
 
-    // Ensure the screenshots directory exists
-    if (!fs.existsSync(path.join("screenshots"))) {
-      fs.mkdirSync(path.join("screenshots"));
+      // Save the image file
+      fs.writeFileSync(filePath, base64Data, "base64");
+
+      screenshotsPaths.push(filename);
+
+      console.log("Screenshot saved:", filePath);
     }
-
-    // Save the image file
-    fs.writeFileSync(filePath, base64Data, "base64");
-
-    console.log("Screenshot saved:", filePath);
 
     const lighthouseReport = await runLighthouse(url);
     const prompt = `
@@ -84,7 +90,7 @@ app.post("/analyze", async (req, res) => {
         Give a very detailed analysis for each context.
     `;
 
-    const result = await sendRequestToChatGPT(filename, prompt);
+    const result = await sendRequestToChatGPT(screenshotsPaths, prompt);
     console.log('ChatGPT Response:', result);
     // Respond to the extension with the ChatGPT analysis
 
@@ -101,7 +107,7 @@ app.listen(process.env.PORT, () => {
 
 
 
-async function sendRequestToChatGPT(filePath, prompt) {
+async function sendRequestToChatGPT(screenshots, prompt) {
   try {
     const host = process.env.HOST;
     const responseFormat = z.object({
@@ -119,7 +125,15 @@ async function sendRequestToChatGPT(filePath, prompt) {
         }),
       ),
     })
-
+    
+    const screenshotsData = screenshots.map((screenshot) => {
+      return  {
+        type: "image_url",
+        image_url: {
+            "url": `${host}screenshots/${screenshot}`,
+        },
+      }
+    });
     const openai = new OpenAI();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -128,12 +142,7 @@ async function sendRequestToChatGPT(filePath, prompt) {
               role: "user",
               content: [
                   { type: "text", text: prompt },
-                  {
-                      type: "image_url",
-                      image_url: {
-                          "url": `${host}screenshots/${filePath}`,
-                      },
-                  }
+                  ...screenshotsData,
               ],
           },
       ],
