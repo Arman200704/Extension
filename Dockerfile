@@ -9,6 +9,8 @@ COPY package*.json ./
 
 # Install the dependencies
 RUN npm install
+RUN sudo apt update
+RUN sudo apt install -y chromium-browser
 
 # Copy the rest of the application code
 COPY . .
