@@ -31,7 +31,7 @@ app.post("/analyze", async (req, res) => {
     const screenshotsPaths = [];
     // Decode base64 image
     for (let i = 0; i < screenshots.length; i++) {
-      const screenshot = screenshots[i];
+      const screenshot = screenshots[i].screenshot;
       const base64Data = screenshot.replace(/^data:image\/png;base64,/, "");
       const filename = `screenshot-${Date.now()}.png`;
       const filePath = path.join("screenshots", filename);
