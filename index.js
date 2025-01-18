@@ -77,20 +77,10 @@ app.post("/analyze", async (req, res) => {
 
         Analyze the attached image of a web application.
 
-        Focus on:
-        1. Layout and spacing.
-        2. Font choices and readability.
-        3. Consistency in design elements.
-        4. Accessibility features (aiming for WCAG AA compliance).
-        5. Usability issues, particularly with navigation and data interaction.
-        6. Grammar issues in content.
-
-        Key Metrics: Users report difficulty locating data due to unclear navigation and cluttered visuals. Bounce rate is currently at 60%, with session durations averaging under 1 minute.
-
-        Provide actionable issues and suggestions for each identified context.
-
         Here is Lighthouse report which will help you to generate more insights.
         ${lighthouseReport}
+
+        Provide actionable issues and suggestions for each identified context.
     `;
 
     const result = await sendRequestToChatGPT(filename, prompt);
