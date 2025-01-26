@@ -21,7 +21,7 @@ app.use('/screenshots', express.static(path.join('screenshots')));
 
 // Save screenshot and send to ChatGPT
 app.post("/analyze", async (req, res) => {
-  const { screenshots, url, focusOn } = req.body;
+  const { screenshots, url, focusOn, about } = req.body;
 
 
   if (!screenshots) {
@@ -50,10 +50,9 @@ app.post("/analyze", async (req, res) => {
       console.log("Screenshot saved:", filePath);
     }
 
-    const webpage = await fetchWebpage(url);
-    console.log('Webpage:', webpage);
-    const about = await whatAboutIsThisWebPage(webpage);
-    console.log('About:', about);
+    // const webpage = await fetchWebpage(url);
+    // console.log('Webpage:', webpage);
+    // const about = await whatAboutIsThisWebPage(webpage);
     const lighthouseReport = await runLighthouse(url);
     const prompt = `
     Analyze the attached image of a web application. Identify areas for improvement in terms of UI/UX design and functionality. Focus on:
