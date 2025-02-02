@@ -60,7 +60,7 @@ app.post("/analyze", async (req, res) => {
         ${focusOn}
 
         Provide actionable issues and suggestions if there are for each identified context, if there aren't please don't give some boolshit, make sure that it will be valuale issues for QA engieners, we need to save their time, and please include solutions of the problem also if you can't give solution keep it empty and give suggestion.
-        Please give me solutions for each issue step by step as small as possible.
+        Please give me solutions and descritption for each issue very detailed.
     `;
 
     const result = await sendRequestToChatGPT(screenshotsPaths, prompt);
