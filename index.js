@@ -86,7 +86,7 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       ui_ux: z.array(
         z.object({
           title: z.string(),
-          problems: z.array(z.object({ issue: z.string(), description: z.string(), location: z.string(), infoLink: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
+          problems: z.array(z.object({ issue: z.string(), solution: z.string(), description: z.string(), location: z.string(), infoLink: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
         }),
       ),
       spelling_issues: z.array(
