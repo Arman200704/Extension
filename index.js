@@ -60,6 +60,7 @@ app.post("/analyze", async (req, res) => {
         ${focusOn}
 
         Provide actionable issues and suggestions if there are for each identified context, if there aren't please don't give some boolshit, make sure that it will be valuale issues for QA engieners, we need to save their time, and please include solutions of the problem also if you can't give solution keep it empty and give suggestion.
+        Please give me solutions for each issue step by step as small as possible.
     `;
 
     const result = await sendRequestToChatGPT(screenshotsPaths, prompt);
@@ -86,7 +87,7 @@ async function sendRequestToChatGPT(screenshots, prompt) {
       ui_ux: z.array(
         z.object({
           title: z.string(),
-          problems: z.array(z.object({ issue: z.string(), solution: z.string(), description: z.string(), location: z.string(), infoLink: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
+          problems: z.array(z.object({ issue: z.string(), solution: z.array(z.string()), description: z.string(), location: z.string(), infoLink: z.string(), suggestion: z.string(), priority: z.enum(["low", "medium", "high"]) })),
         }),
       ),
       spelling_issues: z.array(
