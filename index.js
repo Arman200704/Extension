@@ -55,14 +55,11 @@ app.post("/analyze", async (req, res) => {
     // const about = await whatAboutIsThisWebPage(webpage);
     // const lighthouseReport = await runLighthouse(url);
     const prompt = `
-    Analyze the attached image of a web application. Identify areas for improvement in terms of UI/UX design and functionality. Focus on:
+      Web Page is about ${about}.
+      Analyze the attached image of a web application. Identify areas for improvement in terms of UI/UX design and functionality. Focus on:
         ${focusOn}
 
-        Analyze the attached image of a web application.
-
-        Web Page is about ${about}.
-
-        Provide actionable issues and suggestions for each identified context if there are, if there aren't please don't give some boolshit, make sure that it will be valuale issues for QA engieners, we need to save their time.
+        Provide actionable issues and suggestions if there are for each identified context, if there aren't please don't give some boolshit, make sure that it will be valuale issues for QA engieners, we need to save their time, and please include solutions of the problem also if you can't give solution keep it empty and give suggestion.
     `;
 
     const result = await sendRequestToChatGPT(screenshotsPaths, prompt);
